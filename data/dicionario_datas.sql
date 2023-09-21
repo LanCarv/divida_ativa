@@ -1,0 +1,1 @@
+SELECT chave_tempo, date(data) FROM dim_tempo

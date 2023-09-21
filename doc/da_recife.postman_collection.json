@@ -1,0 +1,325 @@
+{
+	"info": {
+		"_postman_id": "8a1fa559-af3e-4f8c-ac20-f03c22efc484",
+		"name": "da_recife",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "27941330"
+	},
+	"item": [
+		{
+			"name": "feature_store/contribuinte",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": "http://127.0.0.1:5000/feature_store/contribuinte"
+			},
+			"response": [
+				{
+					"name": "feature_store/contribuinte",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": "http://127.0.0.1:5000/feature_store/contribuinte"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "html",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/html; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "54"
+						},
+						{
+							"key": "Server",
+							"value": "Werkzeug/2.0.3 Python/3.9.13"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 13 Jun 2023 11:45:38 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "Processo finalizado - Feature store contribuinte salva"
+				}
+			]
+		},
+		{
+			"name": "feature_store/divida",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": "http://127.0.0.1:5000/feature_store/divida"
+			},
+			"response": [
+				{
+					"name": "feature_store/divida",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": "http://127.0.0.1:5000/feature_store/divida"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "html",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/html; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "48"
+						},
+						{
+							"key": "Server",
+							"value": "Werkzeug/2.0.3 Python/3.9.13"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 13 Jun 2023 11:49:10 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "Processo finalizado - Feature store divida salva"
+				}
+			]
+		},
+		{
+			"name": "train_model_igr/<n_estimators>",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": "http://127.0.0.1:5000/train_model_igr"
+			},
+			"response": [
+				{
+					"name": "train_model_igr/100",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": "http://127.0.0.1:5000/train_model_igr"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1001"
+						},
+						{
+							"key": "Server",
+							"value": "Werkzeug/2.0.3 Python/3.9.13"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 13 Jun 2023 11:55:08 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"matriz_importancia\": {\n        \"0\": {\n            \"features\": \"valor_total_da\",\n            \"importancia\": 0.1414908649\n        },\n        \"1\": {\n            \"features\": \"anos_idade_da\",\n            \"importancia\": 0.0474009915\n        },\n        \"2\": {\n            \"features\": \"quantidade_reparcelamentos\",\n            \"importancia\": 0.069149103\n        },\n        \"3\": {\n            \"features\": \"frequencia_da_pessoa\",\n            \"importancia\": 0.031798038\n        },\n        \"4\": {\n            \"features\": \"historico_pagamento_em_qtd\",\n            \"importancia\": 0.6253311636\n        },\n        \"5\": {\n            \"features\": \"status_situacao\",\n            \"importancia\": 0.00460025\n        },\n        \"6\": {\n            \"features\": \"historico_pagamento_em_valor\",\n            \"importancia\": 0.0764147951\n        },\n        \"7\": {\n            \"features\": \"class_contribuinte_peso\",\n            \"importancia\": 0.0038147938\n        }\n    },\n    \"modelo\": \"RandomForestRegressor(random_state=1337)\",\n    \"mse\": 0.1854549673210889,\n    \"r2\": 0.815014069557489,\n    \"teste_producao\": \"Modelo nao possui R2 e MSE melhores que o modelo em producao\"\n}"
+				}
+			]
+		},
+		{
+			"name": "train_model_rg_contribuinte/<num_cluster>",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": "http://127.0.0.1:5000/train_model_rg_contribuinte/6"
+			},
+			"response": [
+				{
+					"name": "train_model_rg_contribuinte/6",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": "http://127.0.0.1:5000/train_model_rg_contribuinte/6"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "817"
+						},
+						{
+							"key": "Server",
+							"value": "Werkzeug/2.0.3 Python/3.9.13"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 13 Jun 2023 11:56:52 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"centroides_clusteres\": {\n        \"0\": {\n            \"cluster\": 0,\n            \"historico_pagamento_em_qtd\": 1.048,\n            \"historico_pagamento_em_valor\": 1.031,\n            \"status_situacao\": 1.943\n        },\n        \"1\": {\n            \"cluster\": 1,\n            \"historico_pagamento_em_qtd\": 1.021,\n            \"historico_pagamento_em_valor\": 1.019,\n            \"status_situacao\": 0\n        },\n        \"2\": {\n            \"cluster\": 2,\n            \"historico_pagamento_em_qtd\": 1.08,\n            \"historico_pagamento_em_valor\": 1.039,\n            \"status_situacao\": 3\n        },\n        \"3\": {\n            \"cluster\": 3,\n            \"historico_pagamento_em_qtd\": 1.863,\n            \"historico_pagamento_em_valor\": 1.794,\n            \"status_situacao\": 2.844\n        }\n    },\n    \"inertia\": 18477.339161918986,\n    \"num_clusteres\": 4,\n    \"teste_producao\": \"Nao foram encontrados diferentes grupos para os contribuintes.\"\n}"
+				}
+			]
+		},
+		{
+			"name": "predict/batch",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": "http://127.0.0.1:5000/predict/batch"
+			},
+			"response": [
+				{
+					"name": "predict/batch",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": "http://127.0.0.1:5000/predict/batch"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "html",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/html; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "95"
+						},
+						{
+							"key": "Server",
+							"value": "Werkzeug/2.0.3 Python/3.9.13"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 13 Jun 2023 12:13:13 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "Previsoes em lote realizadas e salvas no banco. Dados salvos na tabela: previsoes_igr_estoqueDA"
+				}
+			]
+		},
+		{
+			"name": "predict-solo",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"valor_total_da\": 3000, \r\n    \"anos_idade_da\": 5, \r\n    \"quantidade_reparcelamentos\": 1, \r\n    \"situacao_ativa\": 1,\r\n    \"edificacao\": 1,\r\n    \"tem_cpf\": 1,\r\n    \"frequencia_da_pessoa\": 2, \r\n    \"historico_pagamento_em_qtd\": 0.8,\r\n    \"historico_pagamento_em_valor\": 0.99\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/predict/solo"
+			},
+			"response": [
+				{
+					"name": "predict-solo",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"valor_total_da\": 3000, \r\n    \"anos_idade_da\": 5, \r\n    \"quantidade_reparcelamentos\": 1, \r\n    \"situacao_ativa\": 1,\r\n    \"edificacao\": 1,\r\n    \"tem_cpf\": 1,\r\n    \"frequencia_da_pessoa\": 2, \r\n    \"historico_pagamento_em_qtd\": 0.8,\r\n    \"historico_pagamento_em_valor\": 0.99\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://127.0.0.1:5000/predict/solo"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "352"
+						},
+						{
+							"key": "Server",
+							"value": "Werkzeug/2.0.3 Python/3.9.13"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 13 Jun 2023 11:59:21 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"0\": {\n        \"anos_idade_da\": 5,\n        \"class_contribuinte_peso\": 11.19087,\n        \"frequencia_da_pessoa\": 2,\n        \"historico_pagamento_em_qtd\": 1.8,\n        \"historico_pagamento_em_valor\": 1.99,\n        \"igr\": 0.8264990787,\n        \"quantidade_reparcelamentos\": 1,\n        \"rating_divida\": \"ALTISSIMA\",\n        \"status_situacao\": 3,\n        \"valor_total_da\": 3000\n    }\n}"
+				}
+			]
+		}
+	]
+}

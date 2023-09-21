@@ -16,7 +16,7 @@ env = os.path.join(rootPath, '.env')
 dotenv.load_dotenv(dotenv_path=env)
 
 print("Iniciando carregamento dos dados")
-zip_file = os.path.join(dataPath, 'rating_igr_18_09.zip')
+zip_file = os.path.join(dataPath, 'base_treino.zip')
 z = zipfile.ZipFile(zip_file)
 
 def ler_bases_exportadas(nome_arquivo):
@@ -25,14 +25,18 @@ def ler_bases_exportadas(nome_arquivo):
     os.remove(nome_arquivo)
     return df
 
-base_imovel = ler_bases_exportadas('imovel.csv')
-base_mercantil = ler_bases_exportadas('mercantil.csv')
-#base_parcelas = ler_bases_exportadas('parcelas.csv')
+base_conjunta = ler_bases_exportadas('imovel_mercantil.csv')
+# base_imovel = ler_bases_exportadas('imovel.csv')
+# base_mercantil = ler_bases_exportadas('mercantil.csv')
 base_notas_fiscais = ler_bases_exportadas('emissao_notas.csv')
 
-base_conjunta = pd.concat([base_imovel, base_mercantil])
+
+base_conjunta['data_divida'] = pd.to_datetime(base_conjunta['inscricao_divida'], infer_datetime_format = True)
+base_conjunta['ano_inscricao_da'] = base_conjunta['data_divida'].dt.year
+
+#base_conjunta = pd.concat([base_imovel, base_mercantil])
 # base_conjunta = base_conjunta.query("cpf_cnpj_existe == 1")
-base_conjunta
+#base_conjunta
 
 # Agrego os valores de parcelas para evitar as duplicações
 # base_parcelas_agg = base_parcelas.groupby(['cda', 'id_pessoa', 'tipo_divida'])[['total_valor_pago']].sum()
@@ -52,10 +56,11 @@ base_conjunta
 
 print("Gerando variáveis para identificação dos grupos de contribuintes")
 
-dados_pessoas = base_conjunta[['cda', 'id_pessoa', 'situacao', 'cpf_cnpj_existe', 'tipo_divida', 'edificacao', 'deb_totais', 'deb_pagos', 'valor_tot', 'valor_pago']]
-dados_pessoas['id_pessoa'] = dados_pessoas['id_pessoa'].astype(str) # persistindo tipo de dados
+dados_pessoas = base_conjunta[['cda', 'id_contribuinte', 'situacao', 'cpf_cnpj_existe', 'edificacao', 'deb_totais', 'deb_pagos', 'valor_tot', 'vlr_pago', 'tipo_divida']]
+dados_pessoas['id_contribuinte'] = dados_pessoas['id_contribuinte'].astype(str)  # Convertendo para string
 
-dados_pessoas.dropna(subset=['id_pessoa'], inplace=True)
+dados_pessoas.dropna(subset=['id_contribuinte'], inplace=True)
+dados_pessoas.rename(columns={'id_contribuinte': 'id_pessoa'}, inplace=True)
 
 # Renomeio a coluna criada anteriormente para valor_pago
 # dados_pessoas.rename(columns={'valor_pago_vista_parc':'valor_pago'}, inplace=True)
@@ -66,7 +71,7 @@ frequencia_da_pessoa = dados_pessoas.groupby(['id_pessoa'])['cda'].nunique()
 total_debitos_pessoa = dados_pessoas.groupby(['id_pessoa'])['deb_totais'].sum()
 debitos_pagos_pessoa = dados_pessoas.groupby(['id_pessoa'])['deb_pagos'].sum()
 valor_total_pessoa = dados_pessoas.groupby(['id_pessoa'])['valor_tot'].sum()
-valor_pago_pessoa = dados_pessoas.groupby(['id_pessoa'])['valor_pago'].sum()
+valor_pago_pessoa = dados_pessoas.groupby(['id_pessoa'])['vlr_pago'].sum()
 
 # Agrega informação da base de notas fiscais
 dados_pessoas = pd.merge(
@@ -89,6 +94,7 @@ dados_pessoas.loc[(dados_pessoas['tipo_divida'] == 'mercantil' ) & (dados_pessoa
 # IMOVEL
 dados_pessoas.loc[(dados_pessoas['tipo_divida'] == 'imovel' ) & (dados_pessoas['edificacao'] == 1), 'situacao_ativa'] = 2
 dados_pessoas.loc[(dados_pessoas['tipo_divida'] == 'imovel' ) & (dados_pessoas['edificacao'] == 0), 'situacao_ativa'] = 1
+dados_pessoas.loc[(dados_pessoas['tipo_divida'] == 'imovel' ) & (dados_pessoas['edificacao'] == 0) & (dados_pessoas['cpf_cnpj_existe'] == 0), 'situacao_ativa'] = 0
 
 # O QUE É NULO COLOCAMOS PESO 0
 dados_pessoas['situacao_ativa'] = dados_pessoas['situacao_ativa'].fillna(0)
@@ -142,24 +148,24 @@ dados_pessoas.loc[dados_pessoas['frequencia_da_pessoa'] == 1, 'class_contribuint
 
 # Nomeando a classificação com label de prioridade
 dados_pessoas.loc[dados_pessoas['class_contribuinte'] == 4, 'class_contribuinte_nome'] = 'PRIMEIRA DIVIDA'
-dados_pessoas.loc[dados_pessoas['class_contribuinte'] == 1, 'class_contribuinte_nome'] = 'PIOR PAGADOR'
-dados_pessoas.loc[dados_pessoas['class_contribuinte'] == 0, 'class_contribuinte_nome'] = 'PAGADOR INTERMEDIARIO'
-dados_pessoas.loc[dados_pessoas['class_contribuinte'] == 2, 'class_contribuinte_nome'] = 'BOM PAGADOR'
-dados_pessoas.loc[dados_pessoas['class_contribuinte'] == 3, 'class_contribuinte_nome'] = 'MELHOR PAGADOR'
+dados_pessoas.loc[dados_pessoas['class_contribuinte'] == 0, 'class_contribuinte_nome'] = 'PIOR PAGADOR'
+dados_pessoas.loc[dados_pessoas['class_contribuinte'] == 1, 'class_contribuinte_nome'] = 'PAGADOR INTERMEDIARIO'
+dados_pessoas.loc[dados_pessoas['class_contribuinte'] == 3, 'class_contribuinte_nome'] = 'BOM PAGADOR'
+dados_pessoas.loc[dados_pessoas['class_contribuinte'] == 2, 'class_contribuinte_nome'] = 'MELHOR PAGADOR'
 
 # Dando pesos para os tipos de contribuintes
 dados_pessoas.loc[dados_pessoas['class_contribuinte'] == 4, 'class_contribuinte_peso'] = 1
-dados_pessoas.loc[dados_pessoas['class_contribuinte'] == 1, 'class_contribuinte_peso'] = -1.59910
-dados_pessoas.loc[dados_pessoas['class_contribuinte'] == 3, 'class_contribuinte_peso'] = 1
-dados_pessoas.loc[dados_pessoas['class_contribuinte'] == 2, 'class_contribuinte_peso'] = 4.70957 # esse é o peso do primeira dívida na análise discriminante
-dados_pessoas.loc[dados_pessoas['class_contribuinte'] == 0, 'class_contribuinte_peso'] = 14.31889
+dados_pessoas.loc[dados_pessoas['class_contribuinte'] == 0, 'class_contribuinte_peso'] = -0.98031
+dados_pessoas.loc[dados_pessoas['class_contribuinte'] == 1, 'class_contribuinte_peso'] = 1
+dados_pessoas.loc[dados_pessoas['class_contribuinte'] == 3, 'class_contribuinte_peso'] = 2.54487 # esse é o peso do primeira dívida na análise discriminante
+dados_pessoas.loc[dados_pessoas['class_contribuinte'] == 2, 'class_contribuinte_peso'] = 4.68032
 
 
 df_feature_store_contribuinte = dados_pessoas.reset_index()
 
 df_feature_store_contribuinte = df_feature_store_contribuinte[['id_pessoa', 'situacao', 'cpf_cnpj_existe', 'edificacao', 'qtd_notas_2anos',
                                                                'situacao_ativa', 'status_situacao', 
-                                                               'deb_totais','deb_pagos', 'valor_tot', 'valor_pago', 
+                                                               'deb_totais','deb_pagos', 'valor_tot', 'vlr_pago',
                                                                'frequencia_da_pessoa', 'total_debitos_pessoa', 'debitos_pagos_pessoa', 'valor_total_pessoa', 'valor_pago_pessoa', 
                                                                'historico_pagamento_em_qtd', 'historico_pagamento_em_valor', 
                                                                'class_contribuinte', 'class_contribuinte_nome', 'class_contribuinte_peso']]

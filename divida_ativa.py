@@ -57,14 +57,14 @@ class etl:
         df = pd.read_csv(obj['Body'], sep=';')
         return df
 
-    def coleta_datas(df, df_dim_datas, left_on, nova_coluna_data):
-            df = pd.merge(
-                left=df, right=df_dim_datas,
-                left_on=left_on, right_on='chave_tempo',
-                how= 'left'
-                ).rename(
-                    columns={"date": nova_coluna_data})
-            return df
+    # def coleta_datas(df, df_dim_datas, left_on, nova_coluna_data):
+    #         df = pd.merge(
+    #             left=df, right=df_dim_datas,
+    #             left_on=left_on, right_on='chave_tempo',
+    #             how= 'left'
+    #             ).rename(
+    #                 columns={"date": nova_coluna_data})
+    #         return df
     
     def ler_bases_exportadas(nome_arquivo):
         zip_file = os.path.join(folder_data, 'rating_igr.zip')

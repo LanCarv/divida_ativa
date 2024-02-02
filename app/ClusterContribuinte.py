@@ -35,6 +35,7 @@ def criar_pipeline_treinamento(self):
                                        'historico_pagamento_em_valor'
                                        ]]
     df_pipe_cluster = df_pipe_cluster.set_index(['id_pessoa', 'tipo_divida'])
+    return df_pipe_cluster
 
 def criar_pipeline_predicao(self):
     df_pipe_predict = pessoas_da_aberto_1[['id_pessoa',
@@ -45,7 +46,7 @@ def criar_pipeline_predicao(self):
                                            'historico_pagamento_em_valor'
                                            ]]
     df_pipe_predict = df_pipe_predict.set_index(['id_pessoa', 'tipo_divida'])
-
+    return df_pipe_predict
 print("Iniciando clusterização")
 faixa_n_clusters = [i for i in range(2, 16)]
 valores_inercia = []
@@ -80,7 +81,6 @@ valor_ideal_k = optimal_number_of_clusters(valores_inercia)
 print("Melhor valor de K:", valor_ideal_k)
 
 VALOR_K = 5
-
 # Construindo o melhor agrupador de clusteres
 agrupador = KMeans(n_clusters=VALOR_K, random_state=1337)
 agrupador.fit_transform(df_pipe_cluster)
